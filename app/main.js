@@ -5,11 +5,18 @@ const net = require("net");
 
 // Uncomment this to pass the first stage
 const server = net.createServer((socket) => {
-    socket.write("HTTP/1.1 200 OK\r\n\r\n");
+    socket.on('data', (data) => {
+        const request = data.toString();
+        const requestLine =  request.split('\r\n')[0];
+        const path = requestLine.split(' ')[1];
 
-    socket.on("close", () => {
-        socket.end();
-    });
-});
-
+        let response;
+        if(path === '/'){
+            response = 'HTTP/1.1 200 OK\r\n\r\n'
+        }else{
+            response = 'HTTP/1.1 404 Not Found\r\n\r\n'
+        }
+        socket.end(response)
+    })
+})
 server.listen(4221, "localhost");
