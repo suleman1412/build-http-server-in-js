@@ -13,10 +13,12 @@ const server = net.createServer((socket) => {
         let response;
         if(path === '/'){
             response = 'HTTP/1.1 200 OK\r\n\r\n'
+            socket.write(response)
         }else{
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
+            socket.write(response)
         }
-        socket.end(response)
+        socket.end()
     })
 })
 server.listen(4221, "localhost");
